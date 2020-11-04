@@ -28,6 +28,11 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 
+border_position = ((0, 0), (0, WINDOW_HEIGHT - 5), (0, 0), (WINDOW_WIDTH - 5, 0))
+border_size = ([WINDOW_WIDTH, 5], [WINDOW_WIDTH, 5], [5, WINDOW_HEIGHT], [5, WINDOW_HEIGHT])
+
+energy_position = ((45, 100), (45, 500), (WINDOW_WIDTH - 55, 100), (WINDOW_WIDTH - 45, 500))
+energy_size = ([10, 10], [10, 10], [10, 10], [10, 10])
 
 ### Creating the main surface ###
 main_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), 0, 32)
@@ -37,17 +42,17 @@ basic_font = pygame.font.SysFont("Helvetica", 120)
 game_over_font_big = pygame.font.SysFont("Helvetica", 72)
 game_over_font_small = pygame.font.SysFont("Helvetica", 50)
 
-paddle1 = Paddle((main_surface.get_rect().left + 50, main_surface.get_rect().centery), [10, 100], (255, 255, 255), 4,
-                 4, 13)
-ball = Ball(main_surface.get_rect().center, [10, 10], (255, 255, 255), 5, 2, 8, (random.random(), random.random()))
-main_map = Map((255, 0, 0), ((0, 0), (0, WINDOW_HEIGHT - 5), (0, 0), (WINDOW_WIDTH - 5, 0)),
-               ([WINDOW_WIDTH, 5], [WINDOW_WIDTH, 5], [5, WINDOW_HEIGHT], [5, WINDOW_HEIGHT]))
+paddle1 = Paddle((main_surface.get_rect().left + 50, main_surface.get_rect().centery), [10, 100], WHITE, 4, 4, 13, 1)
+ball = Ball(main_surface.get_rect().center, [10, 10], WHITE, 5, 2, 8, (random.random(), random.random()))
+main_map = Map((255, 0, 0), border_position, border_size, (0, 255, 255), energy_position, energy_size)
 
 event_system = EventSystem({"paddle": paddle1, "ball": ball, "map": main_map})
 
 
-all_sprites = pygame.sprite.RenderPlain(paddle1, ball)
+all_sprites = pygame.sprite.RenderPlain()
 all_sprites.add(*main_map.get_borders_render())
+all_sprites.add(*main_map.get_energy_render())
+all_sprites.add(paddle1, ball)
 
 
 player1_score = 0
@@ -62,14 +67,10 @@ while True:
     event_system.update()
     ball.move()
     keys = pygame.key.get_pressed()
-
     score_board = basic_font.render(str(player1_score) + "           " + str(player2_score), True, WHITE, BLACK) 
     score_board_rect = score_board.get_rect()
     score_board_rect.centerx = surface_rect.centerx 
     score_board_rect.y = 10
-
-    
-    
 
     main_surface.fill(BLACK)
 

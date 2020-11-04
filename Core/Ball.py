@@ -7,7 +7,6 @@ class Ball(GameObject):
     def __init__(self, start_position, size, color, speed, min_speed, max_speed, direction):
         super().__init__(start_position, size, color, speed, min_speed, max_speed, direction)
         self.direction = self.direction.normalize()
-        print(self.min_speed, self.max_speed)
 
     def reflect(self, new_dir):
         self.direction = self.direction.reflect(Vector2(new_dir))
@@ -23,4 +22,3 @@ class Ball(GameObject):
             self.speed = self.min_speed
         else:
             self.speed += speed
-        print(speed)
