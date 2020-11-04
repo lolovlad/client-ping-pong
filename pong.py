@@ -5,6 +5,7 @@ from random import randint
 from Core.Paddle import Paddle
 from Core.Ball import Ball
 from Core.Map import Map
+from Core.EventSystem import EventSystem
 import random
 
 pygame.init()
@@ -36,11 +37,13 @@ basic_font = pygame.font.SysFont("Helvetica", 120)
 game_over_font_big = pygame.font.SysFont("Helvetica", 72)
 game_over_font_small = pygame.font.SysFont("Helvetica", 50)
 
+paddle1 = Paddle((main_surface.get_rect().left + 50, main_surface.get_rect().centery), [10, 100], (255, 255, 255), 4,
+                 4, 13)
+ball = Ball(main_surface.get_rect().center, [10, 10], (255, 255, 255), 5, 2, 8, (random.random(), random.random()))
+main_map = Map((255, 0, 0), ((0, 0), (0, WINDOW_HEIGHT - 5), (0, 0), (WINDOW_WIDTH - 5, 0)),
+               ([WINDOW_WIDTH, 5], [WINDOW_WIDTH, 5], [5, WINDOW_HEIGHT], [5, WINDOW_HEIGHT]))
 
-paddle1 = Paddle((main_surface.get_rect().left + 50, main_surface.get_rect().centery), [10, 100], (255, 255, 255), 8)
-ball = Ball(main_surface.get_rect().center, [10, 10], (255, 255, 255), 5,  (random.random(), random.random()))
-main_map = Map((255, 0, 0), ((0, 0), (WINDOW_WIDTH - 5, 0), (0, 0), (0, WINDOW_HEIGHT - 5)),
-               ([WINDOW_WIDTH, 5], [5, WINDOW_HEIGHT], [5, WINDOW_HEIGHT], [WINDOW_WIDTH, 5]))
+event_system = EventSystem({"paddle": paddle1, "ball": ball, "map": main_map})
 
 
 all_sprites = pygame.sprite.RenderPlain(paddle1, ball)
@@ -56,13 +59,9 @@ while True:
 
     clock.tick(60)
 
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
-
+    event_system.update()
+    ball.move()
     keys = pygame.key.get_pressed()
-    paddle1.move(keys)
 
     score_board = basic_font.render(str(player1_score) + "           " + str(player2_score), True, WHITE, BLACK) 
     score_board_rect = score_board.get_rect()
@@ -106,8 +105,6 @@ while True:
 
 
     all_sprites.draw(main_surface)
-
-    ball.move(main_map.get_borders())
 
     if ball.rect.x > WINDOW_WIDTH:
         player1_score += 1
