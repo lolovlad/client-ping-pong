@@ -3,6 +3,7 @@ from pygame import USEREVENT
 from pygame import K_UP, K_DOWN, transform
 from pygame.math import Vector2
 from Model.Enemy import GameObject
+from Core.Display import Dispaly
 
 
 class Paddle(GameObject):
@@ -16,6 +17,7 @@ class Paddle(GameObject):
     def move(self):
         self.position += (self.direction * self.speed)
         self.rect.center = round(self.position.x), round(self.position.y)
+        Dispaly().render_energy_hud(self.energy, self.position.x)
 
     def reflect(self, new_dir):
         self.direction = self.direction.reflect(Vector2(new_dir))
@@ -38,7 +40,6 @@ class Paddle(GameObject):
             self.energy -= 0.5
         else:
             self.speed = 4
-        print(self.energy)
 
     def punch(self):
         if self.energy // 20 > 0:

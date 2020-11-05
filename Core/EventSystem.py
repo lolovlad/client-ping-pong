@@ -3,11 +3,13 @@ from pygame.locals import *
 from pygame.math import Vector2
 from random import randint
 from Class.Interfase.ISolid import Solide
+from Model.DataBase import DataBase
 
 
 class EventSystem(metaclass=Solide):
-    def __init__(self, game_objects):
+    def __init__(self, game_objects, game_system):
         self.__game_objects = game_objects
+        self.__game_system = game_system
         pygame.time.set_timer(self.__game_objects["paddle"].power_hit, 0)
 
     def update(self):
@@ -23,6 +25,12 @@ class EventSystem(metaclass=Solide):
                     self.__game_objects["paddle"].is_power_hit = True
                     self.__game_objects["paddle"].punch()
                     pygame.time.set_timer(self.__game_objects["paddle"].power_hit, 100)
+            if event.type == DataBase().restart:
+                self.__game_system.restart()
+            if event.type == DataBase().game_over:
+                print(event.message)
+                self.__game_system.game_over(event.message)
+
             for i in self.__game_objects["map"].get_energy_render():
                 if event.type == i.energy_take:
                     i.is_energy = True
@@ -34,6 +42,7 @@ class EventSystem(metaclass=Solide):
         self.__paddle_hit_map()
         self.__paddle_hit_ball()
         self.__hit_energy()
+        self.__game_objects["ball"].move()
 
     def __move_player(self):
         keys = pygame.key.get_pressed()
@@ -48,10 +57,9 @@ class EventSystem(metaclass=Solide):
 
     def __ball_reflect_map(self):
         hit = self.__game_objects["ball"].rect.collidelist(self.__game_objects["map"].get_borders()) + 1
-        if hit == 3:
-            self.__game_objects["ball"].reflect((1, 0))
-        if hit == 4:
-            self.__game_objects["ball"].reflect((-1, 0))
+        if hit in (3, 4):
+            pygame.event.post(DataBase().restart_event)
+            DataBase().set_score(hit % 3, 1)
         if hit == 2:
             self.__game_objects["ball"].reflect((0, 1))
         if hit == 1:
@@ -69,8 +77,7 @@ class EventSystem(metaclass=Solide):
     def __paddle_hit_ball(self):
         hit = self.__game_objects["ball"].rect.colliderect(self.__game_objects["paddle"].rect)
         if hit:
-            self.__game_objects["ball"].direction += self.__game_objects["paddle"].is_ball_direction + \
-                                                     self.__game_objects["paddle"].direction
+            self.__game_objects["ball"].direction += self.__game_objects["paddle"].is_ball_direction
 
             speed_punch = self.__game_objects["paddle"].punch()
             self.__game_objects["ball"].set_speed(speed_punch)
