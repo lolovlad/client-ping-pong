@@ -3,12 +3,12 @@ import time
 from Core.GameSystem import GameSystem
 from Model.DataBase import DataBase
 
-pygame.init()
 
 counter = 0
 
 
 def game_start(co=0):
+    pygame.init()
     clock = pygame.time.Clock()
 
     pygame.mixer.music.load("endofline.ogg")
