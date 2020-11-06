@@ -23,7 +23,7 @@ class Dispaly(metaclass=Solide):
         self.__display = display
 
     def render_score_bord(self):
-        score_board = self.__score.render('{0}    :    {1}'.format(DataBase().score[0] // 2, DataBase().score[1] // 2),
+        score_board = self.__score.render('{0}    :    {1}'.format(DataBase().score[1] // 2, DataBase().score[0] // 2),
                                           True, self.__color_text, self.__color_font)
         score_board_rect = score_board.get_rect()
         score_board_rect.centerx = self.__width // 2

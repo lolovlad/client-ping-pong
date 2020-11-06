@@ -4,93 +4,67 @@ from pygame.math import Vector2
 from random import randint
 from Class.Interfase.ISolid import Solide
 from Model.DataBase import DataBase
+from Core.Network import NetWork
+from Core.Display import Dispaly
 
 
 class EventSystem(metaclass=Solide):
     def __init__(self, game_objects, game_system):
         self.__game_objects = game_objects
         self.__game_system = game_system
-        pygame.time.set_timer(self.__game_objects["paddle"].power_hit, 0)
 
     def update(self):
+        event_sps = {"K_z": "False",
+                     "K_up": "False",
+                     "K_down": "False",
+                     "K_lshift": "False",
+                     "side": DataBase().side}
         for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == self.__game_objects["paddle"].power_hit:
-                self.__game_objects["paddle"].is_power_hit = False
-                pygame.time.set_timer(self.__game_objects["paddle"].power_hit, 0)
             if event.type == KEYDOWN:
                 if event.key == K_z:
-                    self.__game_objects["paddle"].is_power_hit = True
-                    self.__game_objects["paddle"].punch()
-                    pygame.time.set_timer(self.__game_objects["paddle"].power_hit, 100)
+                    event_sps["K_z"] = "True"
             if event.type == DataBase().restart:
                 self.__game_system.restart()
             if event.type == DataBase().game_over:
-                print(event.message)
                 self.__game_system.game_over(event.message)
 
-            for i in self.__game_objects["map"].get_energy_render():
-                if event.type == i.energy_take:
-                    i.is_energy = True
-                    i.image.fill((0, 255, 255))
-                    pygame.time.set_timer(i.energy_take, 0)
+            if event.type == DataBase().move_paddle:
+                info = event.message
+                self.move_paddle(info["x"], info["y"], info["energy"])
 
-        self.__move_player()
-        self.__ball_reflect_map()
-        self.__paddle_hit_map()
-        self.__paddle_hit_ball()
-        self.__hit_energy()
-        self.__game_objects["ball"].move()
+            if event.type == DataBase().move_ball:
+                info = event.message
+                self.move_ball(info["x"], info["y"])
 
-    def __move_player(self):
+            if event.type == DataBase().energy_map:
+                info = event.message
+                self.energy_map(info["id_energy"], info["flag"])
+
         keys = pygame.key.get_pressed()
-        direction = (0, 0)
         if keys[K_UP]:
-            direction = (0, -1)
+            event_sps["K_up"] = "True"
         elif keys[K_DOWN]:
-            direction = (0, 1)
-        self.__game_objects["paddle"].run(keys[K_LSHIFT])
-        self.__game_objects["paddle"].direction = Vector2(direction)
-        self.__game_objects["paddle"].move()
+            event_sps["K_down"] = "True"
+        if keys[K_LSHIFT]:
+            event_sps["K_lshift"] = "True"
+        NetWork().send_message(event_sps)
 
-    def __ball_reflect_map(self):
-        hit = self.__game_objects["ball"].rect.collidelist(self.__game_objects["map"].get_borders()) + 1
-        if hit in (3, 4):
-            pygame.event.post(DataBase().restart_event)
-            DataBase().set_score(hit % 3, 1)
-        if hit == 2:
-            self.__game_objects["ball"].reflect((0, 1))
-        if hit == 1:
-            self.__game_objects["ball"].reflect((0, -1))
+    def move_paddle(self, x, y, energy):
+        self.__game_objects["paddle"]["left"].rect.center = x[0], y[0]
+        self.__game_objects["paddle"]["right"].rect.center = x[1], y[1]
+        self.__game_objects["paddle"]["left"].energy = energy[0]
+        self.__game_objects["paddle"]["right"].energy = energy[1]
+        DataBase().hud_energy[0] = self.__game_objects["paddle"][DataBase().side].energy
+        DataBase().hud_energy[1] = self.__game_objects["paddle"][DataBase().side].position.x
 
-    def __paddle_hit_map(self):
-        hit = self.__game_objects["paddle"].rect.collidelist(self.__game_objects["map"].get_borders()) + 1
-        if hit == 2:
-            self.__game_objects["paddle"].reflect((0, 1))
-            self.__game_objects["paddle"].direction = Vector2((0, 0))
-        if hit == 1:
-            self.__game_objects["paddle"].reflect((0, -1))
-            self.__game_objects["paddle"].direction = Vector2((0, 0))
+    def move_ball(self, x, y):
+        self.__game_objects["ball"].rect.center = x, y
 
-    def __paddle_hit_ball(self):
-        hit = self.__game_objects["ball"].rect.colliderect(self.__game_objects["paddle"].rect)
-        if hit:
-            self.__game_objects["ball"].direction += self.__game_objects["paddle"].is_ball_direction
-
-            speed_punch = self.__game_objects["paddle"].punch()
-            self.__game_objects["ball"].set_speed(speed_punch)
-
-    def add_game_object(self, name_object, game_object):
-        self.__game_objects[name_object] = game_object
-
-    def __hit_energy(self):
-        hit = self.__game_objects["paddle"].rect.collidelist(self.__game_objects["map"].get_energy())
-        if hit != -1:
-            energy = self.__game_objects["map"].get_energy_render()[hit]
-            if energy.is_energy:
-                energy.is_energy = False
-                energy.image.fill((0, 0, 0))
-                pygame.time.set_timer(energy.energy_take, 10000)
-                self.__game_objects["paddle"].set_energy(energy.energy)
+    def energy_map(self, id_energy, flag):
+        for i, z in zip(id_energy, flag):
+            energy = self.__game_objects["map"].get_energy_render()[i]
+            energy.is_energy = z
+            if z:
+                energy.image.fill(DataBase().BUR)
+            else:
+                energy.image.fill(DataBase().BLACK)
