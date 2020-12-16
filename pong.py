@@ -45,11 +45,7 @@ def game_start(co=0):
         if co == 0:
             pygame.mixer.music.play(-1, 0.5)
         co += 1
-
-    while True:
-        clock.tick(60)
-        GameSystem().game_over()
-        pygame.display.update()
+    pygame.quit()
 
 
 while True:

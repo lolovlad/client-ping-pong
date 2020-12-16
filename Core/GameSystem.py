@@ -72,9 +72,10 @@ class GameSystem(metaclass=Solide):
         self.__ball.position = DataBase().get_position_ball()
         self.__ball.direction = Vector2((random.uniform(-0.5, 0.5), random.uniform(-0.2, 0.2)))
 
-    def game_over(self, i=0):
+    def game_over(self, i):
         DataBase().is_playing = False
         self.__main_display.fill(DataBase().BLACK)
         Dispaly().render_game_over(i, ((DataBase().WINDOW_HEIGHT + DataBase().DISPLAY_HEIGHT) // 2,
                                        DataBase().WINDOW_WIDTH // 2))
         pygame.display.update()
+        time.sleep(2)

@@ -11,6 +11,9 @@ class CommandPars(Observer):
             if subject["Type_command"] == "Started_game":
                 DataBase().side = subject["Side"]
                 DataBase().is_playing = True
+            if subject["Type_command"] == "Game_over":
+                DataBase().game_over_event.message = subject["Win"]
+                event.post(DataBase().game_over_event)
         elif subject["Type_message"] == "Update_position":
             position = subject["Position"]
 
