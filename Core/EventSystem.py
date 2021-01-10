@@ -1,12 +1,13 @@
 import pygame, sys, time
 from pygame.locals import *
 from pygame.math import Vector2
-from random import randint
+import random
 from Class.Interfase.ISolid import Solide
 from Model.DataBase import DataBase
 from Core.Network import NetWork
 from Core.Display import Dispaly
 from Class.Config import Config
+from Core.Ball import Ball
 
 
 class EventSystem(metaclass=Solide):
@@ -59,7 +60,21 @@ class EventSystem(metaclass=Solide):
         DataBase().hud_energy[1] = self.__game_objects["paddle"][DataBase().side].position.x
 
     def move_ball(self, x, y):
-        self.__game_objects["ball"].rect.center = x, y
+        config = Config("game.json")
+        config.load()
+        if len(self.__game_objects["ball"]) < len(x):          
+            t = len(self.__game_objects["ball"])
+            for i in range(len(self.__game_objects["ball"])):
+                self.__game_objects["ball"].append(Ball((self.__game_objects["ball"][i].rect.center), [10, 10], config.get_color("White"),
+                               5, 2, 8, (x[t + 2 * i], y[t + 2 * i])))
+                self.__game_objects["ball"].append(Ball((self.__game_objects["ball"][i].rect.center), [10, 10], config.get_color("White"),
+                               5, 2, 8, (x[t + 1 + 2 * i], y[t + 1 + 2 * i])))
+        if len(self.__game_objects["ball"]) > len(x):
+            for i in self.__game_objects["ball"]:
+                self.__game_objects["ball"].remove(i)
+            self.__game_system.new_ball()
+        for i in range(len(self.__game_objects["ball"])):
+            self.__game_objects["ball"][i].rect.center = x[i], y[i]
 
     def energy_map(self, id_energy, flag):
         config = Config("game.json")
