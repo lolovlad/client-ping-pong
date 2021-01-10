@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from Class.Interfase.ISolid import Solide
 from Model.DataBase import DataBase
+from Class.Config import Config
 
 
 class MainMenuEvents(metaclass=Solide):
@@ -10,6 +11,8 @@ class MainMenuEvents(metaclass=Solide):
         self.objects = objects
 
     def update(self):
+        config = Config("game.json")
+        config.load()        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
@@ -18,20 +21,20 @@ class MainMenuEvents(metaclass=Solide):
                 self.objects.update(x, y)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = event.pos
-                if x in range((DataBase().WINDOW_WIDTH - 475) // 2, (DataBase().WINDOW_WIDTH - 475) // 2 + 401)\
+                if x in range((config.get_window("Width") - 400) // 2, (config.get_window("Width") - 475) // 2 + 401)\
                    and y in range(200, 251):
                     return 'nameedit'
-                elif x in range((DataBase().WINDOW_WIDTH - 475) // 2, (DataBase().WINDOW_WIDTH - 475) // 2 + 401)\
-                     and y in range(DataBase().WINDOW_HEIGHT + DataBase().DISPLAY_HEIGHT - 100,\
-                                    DataBase().WINDOW_HEIGHT + DataBase().DISPLAY_HEIGHT - 49):
+                elif x in range((config.get_window("Width") - 475) // 2, (config.get_window("Width") - 475) // 2 + 401)\
+                     and y in range(config.get_window("Height") - 100,\
+                                    config.get_window("Height") - 49):
                     return 'connection'
-                elif (x in range((DataBase().WINDOW_WIDTH - 475) // 2, (DataBase().WINDOW_WIDTH - 475) // 2 + 76) or\
-                      x in range((DataBase().WINDOW_WIDTH - 475) // 2 + 100, (DataBase().WINDOW_WIDTH - 475) // 2 + 176) or\
-                      x in range((DataBase().WINDOW_WIDTH - 475) // 2 + 200, (DataBase().WINDOW_WIDTH - 475) // 2 + 276) or\
-                      x in range((DataBase().WINDOW_WIDTH - 475) // 2 + 300, (DataBase().WINDOW_WIDTH - 475) // 2 + 376) or\
-                      x in range((DataBase().WINDOW_WIDTH - 475) // 2 + 400, (DataBase().WINDOW_WIDTH - 475) // 2 + 476)) and\
+                elif (x in range((config.get_window("Width") - 475) // 2, (config.get_window("Width") - 475) // 2 + 76) or\
+                      x in range((config.get_window("Width") - 475) // 2 + 100, (config.get_window("Width") - 475) // 2 + 176) or\
+                      x in range((config.get_window("Width") - 475) // 2 + 200, (config.get_window("Width") - 475) // 2 + 276) or\
+                      x in range((config.get_window("Width") - 475) // 2 + 300, (config.get_window("Width") - 475) // 2 + 376) or\
+                      x in range((config.get_window("Width") - 475) // 2 + 400, (config.get_window("Width") - 475) // 2 + 476)) and\
                      y in range(300, 376):
-                    return str((x - (DataBase().WINDOW_WIDTH - 475) // 2) // 100)
+                    return str((x - (config.get_window("Width") - 475) // 2) // 100)
                 else:
                     return 'no_one'
             if event.type == pygame.KEYDOWN:

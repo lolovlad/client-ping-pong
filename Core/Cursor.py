@@ -1,5 +1,6 @@
 import pygame
 from Model.DataBase import DataBase
+from Class.Config import Config
 
 class Cursor(pygame.sprite.Sprite):
     
@@ -13,14 +14,16 @@ class Cursor(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         
     def update(self, x, y):
-        if (x in range((DataBase().WINDOW_WIDTH - 400) // 2, (DataBase().WINDOW_WIDTH - 400) // 2 + 401)\
-            and (y in range(200, 251) or y in range(DataBase().WINDOW_HEIGHT + DataBase().DISPLAY_HEIGHT - 100,\
-                                                    DataBase().WINDOW_HEIGHT + DataBase().DISPLAY_HEIGHT - 100 + 51))) or\
-           ((x in range((DataBase().WINDOW_WIDTH - 475) // 2, (DataBase().WINDOW_WIDTH - 475) // 2 + 76) or\
-             x in range((DataBase().WINDOW_WIDTH - 475) // 2 + 100, (DataBase().WINDOW_WIDTH - 475) // 2 + 176) or\
-             x in range((DataBase().WINDOW_WIDTH - 475) // 2 + 200, (DataBase().WINDOW_WIDTH - 475) // 2 + 276) or\
-             x in range((DataBase().WINDOW_WIDTH - 475) // 2 + 300, (DataBase().WINDOW_WIDTH - 475) // 2 + 376) or\
-             x in range((DataBase().WINDOW_WIDTH - 475) // 2 + 400, (DataBase().WINDOW_WIDTH - 475) // 2 + 476)) and\
+        config = Config("game.json")
+        config.load()        
+        if (x in range((config.get_window("Width") - 400) // 2, (config.get_window("Width") - 400) // 2 + 401)\
+            and (y in range(200, 251) or y in range(config.get_window("Height") - 100,\
+                                                    config.get_window("Height") - 100 + 51))) or\
+           ((x in range((config.get_window("Width") - 475) // 2, (config.get_window("Width") - 475) // 2 + 76) or\
+             x in range((config.get_window("Width") - 475) // 2 + 100, (config.get_window("Width") - 475) // 2 + 176) or\
+             x in range((config.get_window("Width") - 475) // 2 + 200, (config.get_window("Width") - 475) // 2 + 276) or\
+             x in range((config.get_window("Width") - 475) // 2 + 300, (config.get_window("Width") - 475) // 2 + 376) or\
+             x in range((config.get_window("Width") - 475) // 2 + 400, (config.get_window("Width") - 475) // 2 + 476)) and\
             y in range(300, 376)):
             self.image = self.img2
         else:

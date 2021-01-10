@@ -3,6 +3,7 @@ from Class.Interfase.ISolid import Solide
 from Core.Cursor import Cursor
 from Core.MainMenuEvents import MainMenuEvents
 from Model.DataBase import DataBase
+from Class.Config import Config
 
 class Picture(pygame.sprite.Sprite):
     def __init__(self, img, group):
@@ -23,8 +24,10 @@ class MainMenu(metaclass=Solide):
         self.skin = 0
 
     def game_init(self):
-        self.__main_display = pygame.display.set_mode((DataBase().WINDOW_WIDTH,\
-                                                       DataBase().WINDOW_HEIGHT + DataBase().DISPLAY_HEIGHT))
+        config = Config("game.json")
+        config.load()
+
+        self.__main_display = pygame.display.set_mode((config.get_window("Width"), config.get_window("Height")))
         self.__main_display.fill((0, 0, 0))
         pygame.display.set_caption('Ping-Pong 2.0')
         Picture(pygame.image.load('mainmenu.png'), self.__main_sprites)
@@ -33,6 +36,9 @@ class MainMenu(metaclass=Solide):
         
 
     def update_game(self):
+        config = Config("game.json")
+        config.load()
+        
         self.__main_display.fill((0, 0, 0))
         self.menu_events.player_name = self.player_name
         t = self.menu_events.update()
@@ -46,35 +52,35 @@ class MainMenu(metaclass=Solide):
         else:
             col = 'yellow'
             text = pygame.font.Font(None, 25).render('Введите свое имя', True, col)
-            self.__main_display.blit(text, ((DataBase().WINDOW_WIDTH - 400) // 2, 255))
+            self.__main_display.blit(text, ((config.get_window("Width") - 400) // 2, 255))
             self.player_name = self.menu_events.player_name
             
-        pygame.draw.rect(self.__main_display, col, ((DataBase().WINDOW_WIDTH - 400) // 2, 200, 400, 50), 3)
+        pygame.draw.rect(self.__main_display, col, ((config.get_window("Width") - 400) // 2, 200, 400, 50), 3)
         text = pygame.font.Font(None, 50).render(self.player_name, True, col)
-        self.__main_display.blit(text, ((DataBase().WINDOW_WIDTH - 400) // 2 + 8, 210))
+        self.__main_display.blit(text, ((config.get_window("Width") - 400) // 2 + 8, 210))
         
-        pygame.draw.rect(self.__main_display, 'white', ((DataBase().WINDOW_WIDTH - 475) // 2, 300, 75, 75), 0)
-        pygame.draw.rect(self.__main_display, 'red', ((DataBase().WINDOW_WIDTH - 475) // 2 + 100, 300, 75, 75), 0)
-        pygame.draw.rect(self.__main_display, 'green', ((DataBase().WINDOW_WIDTH - 475) // 2 + 200, 300, 75, 75), 0)
-        pygame.draw.rect(self.__main_display, 'blue', ((DataBase().WINDOW_WIDTH - 475) // 2 + 300, 300, 75, 75), 0)
-        pygame.draw.rect(self.__main_display, 'yellow', ((DataBase().WINDOW_WIDTH - 475) // 2 + 400, 300, 75, 75), 0)
+        pygame.draw.rect(self.__main_display, 'white', ((config.get_window("Width") - 475) // 2, 300, 75, 75), 0)
+        pygame.draw.rect(self.__main_display, 'red', ((config.get_window("Width") - 475) // 2 + 100, 300, 75, 75), 0)
+        pygame.draw.rect(self.__main_display, 'green', ((config.get_window("Width") - 475) // 2 + 200, 300, 75, 75), 0)
+        pygame.draw.rect(self.__main_display, 'blue', ((config.get_window("Width") - 475) // 2 + 300, 300, 75, 75), 0)
+        pygame.draw.rect(self.__main_display, 'yellow', ((config.get_window("Width") - 475) // 2 + 400, 300, 75, 75), 0)
         
         if len(self.button) == 1:
             self.skin = int(self.button)
-        pygame.draw.rect(self.__main_display, 'green', (self.skin * 100 + (DataBase().WINDOW_WIDTH - 475) // 2 - 5,\
+        pygame.draw.rect(self.__main_display, 'green', (self.skin * 100 + (config.get_window("Width")- 475) // 2 - 5,\
                                                         295, 85, 85), 3)
         
-        pygame.draw.rect(self.__main_display, 'red', ((DataBase().WINDOW_WIDTH - 400) // 2,\
-                                                      DataBase().WINDOW_HEIGHT + DataBase().DISPLAY_HEIGHT - 100,\
+        pygame.draw.rect(self.__main_display, 'red', ((config.get_window("Width") - 400) // 2,\
+                                                      config.get_window("Height") - 100,\
                                                       400, 50), 0)
         if self.button != 'connection':
             text = pygame.font.Font(None, 50).render('Начать игру', True, 'white')
-            self.__main_display.blit(text, ((DataBase().WINDOW_WIDTH - 400) // 2 + 98,\
-                                            DataBase().WINDOW_HEIGHT + DataBase().DISPLAY_HEIGHT - 90))
+            self.__main_display.blit(text, ((config.get_window("Width") - 400) // 2 + 98,\
+                                            config.get_window("Height") - 90))
         else:
             text = pygame.font.Font(None, 50).render('Поиск игроков...', True, 'white')
-            self.__main_display.blit(text, ((DataBase().WINDOW_WIDTH - 400) // 2 + 68,\
-                                            DataBase().WINDOW_HEIGHT + DataBase().DISPLAY_HEIGHT - 90))
+            self.__main_display.blit(text, ((config.get_window("Width") - 400) // 2 + 68,\
+                                            config.get_window("Height") - 90))
         
         if pygame.mouse.get_focused():
             self.cursor_sprites.draw(self.__main_display)

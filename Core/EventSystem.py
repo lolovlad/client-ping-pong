@@ -6,6 +6,7 @@ from Class.Interfase.ISolid import Solide
 from Model.DataBase import DataBase
 from Core.Network import NetWork
 from Core.Display import Dispaly
+from Class.Config import Config
 
 
 class EventSystem(metaclass=Solide):
@@ -61,10 +62,12 @@ class EventSystem(metaclass=Solide):
         self.__game_objects["ball"].rect.center = x, y
 
     def energy_map(self, id_energy, flag):
+        config = Config("game.json")
+        config.load()        
         for i, z in zip(id_energy, flag):
             energy = self.__game_objects["map"].get_energy_render()[i]
             energy.is_energy = z
             if z:
-                energy.image.fill(DataBase().BUR)
+                energy.image.fill(config.get_color("Turquoise"))
             else:
-                energy.image.fill(DataBase().BLACK)
+                energy.image.fill(config.get_color("Black"))
