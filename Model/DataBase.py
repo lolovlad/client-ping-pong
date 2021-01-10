@@ -5,24 +5,11 @@ from Class.Interfase.ISolid import Solide
 
 class DataBase(metaclass=Solide):
     def __init__(self):
-        self.WINDOW_WIDTH = 1024
-        self.WINDOW_HEIGHT = 600
-        self.DISPLAY_HEIGHT = 300
-        self.WHITE = (255, 255, 255)
-        self.BLACK = (0, 0, 0)
-        self.BUR = (0, 255, 255)
-        self.RED = (255, 0, 0)
         self.is_playing = False
-        self.__position_left_paddle = (45, 400)
+        self.__position_left_paddle = ()
         self.hud_energy = [0, 0]
-        self.__position_right_paddle = (self.WINDOW_WIDTH - 55, 400)
+        self.__position_right_paddle = ()
         self.__position_ball = ()
-        self.border_position = ((0, 0), (0, self.WINDOW_HEIGHT - 5), (0, 0), (self.WINDOW_WIDTH - 5, 0))
-        self.border_size = ([self.WINDOW_WIDTH, 5], [self.WINDOW_WIDTH, 5],
-                            [5, self.WINDOW_HEIGHT], [5, self.WINDOW_HEIGHT])
-
-        self.energy_position = ((45, 100), (45, 500), (self.WINDOW_WIDTH - 60, 100), (self.WINDOW_WIDTH - 60, 500))
-        self.energy_size = ([10, 10], [10, 10], [10, 10], [10, 10])
 
         self.score = [0, 0]
 
@@ -39,7 +26,7 @@ class DataBase(metaclass=Solide):
         self.energy_map_event = pygame.event.Event(self.energy_map)
 
         self.left_color = 'white'
-        self.right_color = 'white'
+        self.right_color = 'white'        
         self.side = None
 
     def set_position_paddles(self, position_left, position_right):
