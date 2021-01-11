@@ -80,11 +80,12 @@ class GameSystem(metaclass=Solide):
 
     def game_over(self, i):
         config = Config("game.json")
-        config.load() 
-        
+        config.load()
+
         DataBase().is_playing = False
-        
-        self.__main_display.fill(DataBase().BLACK)
-        Dispaly().render_game_over((i, config.get_window("Height") // 2, config.get_window("Width") // 2))
+
+        self.__main_display.fill(config.get_color("Black"))
+
+        Dispaly().render_game_over(i, (config.get_window("Height") // 2, config.get_window("Width") // 2))
         pygame.display.update()
         time.sleep(2)

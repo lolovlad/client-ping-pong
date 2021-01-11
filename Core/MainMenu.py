@@ -14,12 +14,12 @@ class Picture(pygame.sprite.Sprite):
         
 
 class MainMenu(metaclass=Solide):
-    def __init__(self):
+    def __init__(self, name):
         self.__main_display = None
         self.__main_sprites = pygame.sprite.RenderPlain()
         self.cursor_sprites = pygame.sprite.RenderPlain()
         self.button = 'no_one'
-        self.player_name = 'Игрок'
+        self.player_name = name
         self.menu_events = None
         self.skin = 0
 
@@ -27,6 +27,7 @@ class MainMenu(metaclass=Solide):
         config = Config("game.json")
         config.load()
 
+        self.button = 'no_one'
         self.__main_display = pygame.display.set_mode((config.get_window("Width"), config.get_window("Height")))
         self.__main_display.fill((0, 0, 0))
         pygame.display.set_caption('Ping-Pong 2.0')

@@ -27,14 +27,14 @@ class Dispaly(metaclass=Solide):
                                           True, self.__color_text, self.__color_font)
         score_board_rect = score_board.get_rect()
         score_board_rect.centerx = self.__width // 2
-        score_board_rect.y = self.__height - (300 // 2)
+        score_board_rect.y = self.__height + (300 // 2)
         self.__display.blit(score_board, score_board_rect)
 
     def render_energy_hud(self, energy, x):
         energy_board = self.__energy.render('{0}'.format(round(energy)), True, self.__color_text, self.__color_font)
         energy_board_rect = energy_board.get_rect()
         energy_board_rect.centerx = x
-        energy_board_rect.y = self.__height - (300 // 2)
+        energy_board_rect.y = self.__height + (300 // 2)
         self.__display.blit(energy_board, energy_board_rect)
 
     def render_game_over(self, player, coord):
