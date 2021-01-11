@@ -69,12 +69,13 @@ class EventSystem(metaclass=Solide):
                                5, 2, 8, (x[t + 2 * i], y[t + 2 * i])))
                 self.__game_objects["ball"].append(Ball((self.__game_objects["ball"][i].rect.center), [10, 10], config.get_color("White"),
                                5, 2, 8, (x[t + 1 + 2 * i], y[t + 1 + 2 * i])))
-        if len(self.__game_objects["ball"]) > len(x):
+        try:
+            for i in range(len(self.__game_objects["ball"])):
+                self.__game_objects["ball"][i].rect.center = x[i], y[i]
+        except:
             for i in self.__game_objects["ball"]:
                 self.__game_objects["ball"].remove(i)
             self.__game_system.new_ball()
-        for i in range(len(self.__game_objects["ball"])):
-            self.__game_objects["ball"][i].rect.center = x[i], y[i]
 
     def energy_map(self, id_energy, flag):
         config = Config("game.json")
