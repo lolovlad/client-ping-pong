@@ -1,5 +1,7 @@
 import pygame
 import time
+import os
+import sys
 from Core.GameSystem import GameSystem
 from Core.MainMenu import MainMenu
 from Model.DataBase import DataBase
@@ -50,15 +52,16 @@ def game_menu():
     clock = pygame.time.Clock()
     pygame.mixer.music.load("Tron_legacy_end.ogg")
     pygame.mixer.music.play(-1, 0.5)
-    MainMenu().game_init()
+    mm = MainMenu(user_name)
+    mm.game_init()
     pygame.mouse.set_visible(False)
     while not DataBase().is_playing:
         clock.tick(120)
-        MainMenu().update_game()
+        mm.update_game()
         pygame.display.update()
-        if MainMenu().button == 'connection' and co == 0:
-            user_name = MainMenu().player_name
-            color = ['white', 'red', 'green', 'blue', 'yellow'][MainMenu().skin]
+        if mm.button == 'connection' and co == 0:
+            user_name = mm.player_name
+            color = ['white', 'red', 'green', 'blue', 'yellow'][mm.skin]
             socket = NetWork()
             socket('localhost', 2510)
             DataBaseNetwork().attach(CommandPars())
@@ -67,7 +70,9 @@ def game_menu():
     pygame.quit()
 
 while True:
+    game_menu()
     if DataBase().is_playing:
         game_start(counter)
-    else:
-        game_menu()
+    os.execl(sys.executable, 'python', __file__, *sys.argv[1:])
+        
+        
