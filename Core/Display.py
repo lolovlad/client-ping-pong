@@ -29,13 +29,13 @@ class Dispaly(metaclass=Solide):
         score_board_rect.centerx = self.__width // 2
         score_board_rect.y = self.__height + (300 // 2)
         self.__display.blit(score_board, score_board_rect)
-        
+
     def render_timer(self):
         score_board = self.__score.render('{0}'.format(DataBase().timer), True, self.__color_text, self.__color_font)
         score_board_rect = score_board.get_rect()
         score_board_rect.centerx = self.__width // 2
         score_board_rect.y = self.__height + 75
-        self.__display.blit(score_board, score_board_rect)    
+        self.__display.blit(score_board, score_board_rect)
 
     def render_energy_hud(self, energy, x):
         energy_board = self.__energy.render('{0}'.format(round(energy)), True, self.__color_text, self.__color_font)
