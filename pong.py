@@ -11,7 +11,7 @@ counter = 0
 
 
 user_name = input()
-ip = int(input())
+ip = 42
 
 
 def network_core(net, mmr):
@@ -26,7 +26,7 @@ def network_core(net, mmr):
 
 
 socket = NetWork()
-socket('192.168.0.108', 2510)
+socket('localhost', 2510)
 DataBaseNetwork().attach(CommandPars())
 Thread(target=network_core, args=(socket, 1000,), daemon=True).start()
 
