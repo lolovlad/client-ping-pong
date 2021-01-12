@@ -49,7 +49,7 @@ class GameSystem(metaclass=Solide):
         self.__ball = Ball(DataBase().get_position_ball(), [10, 10], config.get_color("White"),
                            5, 2, 8, (random.uniform(-0.5, 0.5), random.uniform(-0.2, 0.2)))
 
-        self.__map = Map(config.get_color("Red"), config.get_color("Turquoise"),)
+        self.__map = Map(config.get_color("Red"), config.get_color("Turquoise"))
 
         event_system = EventSystem({"paddle": {"left": self.__paddle_left,
                                                "right": self.__paddle_right}, "ball": self.__ball, "map": self.__map},
