@@ -25,6 +25,8 @@ class DataBase(metaclass=Solide):
         self.energy_map = USEREVENT + 104
         self.energy_map_event = pygame.event.Event(self.energy_map)
 
+        self.left_color = 'white'
+        self.right_color = 'white'        
         self.side = None
 
     def set_position_paddles(self, position_left, position_right):

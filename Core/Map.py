@@ -45,7 +45,7 @@ class Map:
             energy = Energy(i, z, self.__color_energy, info, 33)
             info += 1
             self.__energys.append(energy.rect)
-            self.__energys_render.append(energy)
+            self.__energys_render.append(energy)   
 
     def get_borders_render(self):
         return self.__borders_render

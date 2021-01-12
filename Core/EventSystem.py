@@ -63,7 +63,7 @@ class EventSystem(metaclass=Solide):
 
     def energy_map(self, id_energy, flag):
         config = Config("game.json")
-        config.load()
+        config.load()        
         for i, z in zip(id_energy, flag):
             energy = self.__game_objects["map"].get_energy_render()[i]
             energy.is_energy = z

@@ -10,6 +10,12 @@ class CommandPars(Observer):
         if subject["Type_message"] == "Server":
             if subject["Type_command"] == "Started_game":
                 DataBase().side = subject["Side"]
+                if subject["Side"] == 'left':
+                    DataBase().left_color = subject["Color"]
+                    DataBase().right_color = subject["EnemyColor"]
+                else:
+                    DataBase().left_color = subject["EnemyColor"]
+                    DataBase().right_color = subject["Color"]                    
                 DataBase().is_playing = True
             if subject["Type_command"] == "Game_over":
                 DataBase().game_over_event.message = subject["Win"]
