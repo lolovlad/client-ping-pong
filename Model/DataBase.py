@@ -10,7 +10,8 @@ class DataBase(metaclass=Solide):
         self.hud_energy = [0, 0]
         self.__position_right_paddle = ()
         self.__position_ball = ()
-
+        
+        self.timer = '24'
         self.score = [0, 0]
 
         self.restart = USEREVENT + 100

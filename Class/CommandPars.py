@@ -26,11 +26,10 @@ class CommandPars(Observer):
             DataBase().move_paddle_event.message = position["paddle"]
             event.post(DataBase().move_paddle_event)
 
-            DataBase().move_ball_event.message = position["ball"]
+            DataBase().move_ball_event.message = position["balls"]
             event.post(DataBase().move_ball_event)
 
             DataBase().energy_map_event.message = position["energy"]
             event.post(DataBase().energy_map_event)
             DataBase().score = position["score"]
-
-
+            DataBase().timer = position["timer"]

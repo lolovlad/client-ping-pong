@@ -9,6 +9,7 @@ from threading import Thread
 from Core.Network import NetWork
 from Model.DataBaseNetwork import DataBaseNetwork
 from Class.CommandPars import CommandPars
+
 counter = 0
 
 user_name = 'Игрок'
@@ -34,6 +35,7 @@ def game_start(co=0):
     pygame.mixer.music.load("endofline.ogg")
     GameSystem().game_init()
     pygame.display.set_caption(f'Ping-Pong 2.0 {user_name}')
+
     while DataBase().is_playing:
         clock.tick(120)
         GameSystem().update_game()
@@ -74,5 +76,3 @@ while True:
     if DataBase().is_playing:
         game_start(counter)
     os.execl(sys.executable, 'python', __file__, *sys.argv[1:])
-        
-        
