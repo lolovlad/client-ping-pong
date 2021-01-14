@@ -10,7 +10,8 @@ class DataBase(metaclass=Solide):
         self.hud_energy = [0, 0]
         self.__position_right_paddle = ()
         self.__position_ball = ()
-
+        
+        self.timer = '24'
         self.score = [0, 0]
 
         self.restart = USEREVENT + 100
@@ -25,6 +26,8 @@ class DataBase(metaclass=Solide):
         self.energy_map = USEREVENT + 104
         self.energy_map_event = pygame.event.Event(self.energy_map)
 
+        self.left_color = 'white'
+        self.right_color = 'white'        
         self.side = None
 
     def set_position_paddles(self, position_left, position_right):
