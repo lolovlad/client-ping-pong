@@ -24,13 +24,13 @@ class GameSystem(metaclass=Solide):
         self.__main_sprites = pygame.sprite.RenderPlain()
         self.__ball_sprites = pygame.sprite.RenderPlain()
 
+
     def init(self, player, event_system):
         self.__player[player["side"]] = player["player"]
         self.__event_system = event_system
 
     def game_init(self):
         clock = pygame.time.Clock()
-
         config = Config("game.json")
         config.load()
 
@@ -42,9 +42,9 @@ class GameSystem(metaclass=Solide):
         DataBase().set_position_ball(config.get_position("Ball"))
         DataBase().set_position_paddles(config.get_position("Left_paddle"), config.get_position("Right_paddle"))
 
-        self.__paddle_left = Paddle(config.get_position("Left_paddle"), [10, 100], config.get_color("White"),
+        self.__paddle_left = Paddle(config.get_position("Left_paddle"), [10, 100], DataBase().left_color,
                                     4, 4, 13, 1)
-        self.__paddle_right = Paddle(config.get_position("Right_paddle"), [10, 100], config.get_color("White"),
+        self.__paddle_right = Paddle(config.get_position("Right_paddle"), [10, 100], DataBase().right_color,
                                      4, 4, 13, 2)
 
         self.__ball = [Ball(DataBase().get_position_ball(), [10, 10], config.get_color("White"),
@@ -55,11 +55,11 @@ class GameSystem(metaclass=Solide):
         event_system = EventSystem({"paddle": {"left": self.__paddle_left,
                                                "right": self.__paddle_right}, "ball": self.__ball, "map": self.__map},
                                    self)
-
+        
         Dispaly().init(config.get_window("Height") - 300,
                        config.get_window("Width"), config.get_color("White"), config.get_color("Black"),
                        self.__main_display)
-
+        
         GameSystem().init({"side": "left", "player": self.__paddle_left}, event_system)
 
         self.__main_sprites.add(*self.__map.get_borders_render())
@@ -80,6 +80,7 @@ class GameSystem(metaclass=Solide):
     def restart(self):
         config = Config("game.json")
         config.load()        
+
         self.__paddle_left.energy = 33
         self.__paddle_left.position = DataBase().get_position_paddles()[0]
         self.__paddle_left.direction = (0, 0)
@@ -90,7 +91,7 @@ class GameSystem(metaclass=Solide):
     def new_ball(self):
         for i in self.__ball_sprites:
             self.__ball_sprites.remove(i)
-        
+
 
     def game_over(self, i):
         config = Config("game.json")
