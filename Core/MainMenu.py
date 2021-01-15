@@ -7,11 +7,14 @@ from Class.Config import Config
 
 class Picture(pygame.sprite.Sprite):
     def __init__(self, img, group):
+        config = Config("game.json")
+        config.load()
         pygame.sprite.Sprite.__init__(self)
         super().__init__(group)
+        img = pygame.transform.scale(img, (config.get_window("Width"), config.get_window("Height")))
         self.image = img
-        self.rect = self.image.get_rect()
-        
+        self.rect = ((0, 0))
+        print(self.rect)
 
 class MainMenu(metaclass=Solide):
     def __init__(self, name):
